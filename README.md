@@ -4,11 +4,11 @@ A little exercise to build a web application following an agile development proc
 
 ## Product vision statement
 
-See instructions. Delete this line and place the Product Vision Statement here.
+An application in which users can list gift cards they are looking to sell/swap, and which matches users who are looking for each other's gift cards.
 
 ## User stories
 
-See instructions. Delete this line and place a link to the user stories here.
+https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues/
 
 ## Steps necessary to run the software
 
