@@ -148,3 +148,53 @@ body {
 .auth-switch a {
   color: #3b5bdb;
 }
+
+.hint {
+  color: #555b6e;
+  font-size: 0.9rem;
+  margin: -10px 0 16px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  margin: 16px 0 16px;
+}
+
+.listing {
+  background: #ffffff;
+  border: 1px solid #e3e5ee;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.listing-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.listing-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.listing-value {
+  font-weight: 700;
+  color: #2b8a3e;
+}
+
+.listing-wants {
+  margin: 6px 0 2px;
+}
+
+.listing-owner {
+  margin: 0;
+  color: #555b6e;
+  font-size: 0.9rem;
+}
+
+.empty {
+  text-align: center;
+  color: #555b6e;
+}

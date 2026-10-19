@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timezone
 
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -15,7 +16,7 @@ from flask_login import (
 from pymongo.errors import DuplicateKeyError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import users
+from db import listings, users
 
 load_dotenv()
 
@@ -100,6 +101,46 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+        brand = request.form.get("brand", "").strip()
+        wanted = [b.strip() for b in request.form.get("wanted", "").split(",") if b.strip()]
+
+        try:
+            value = round(float(request.form.get("value", "")), 2)
+        except ValueError:
+            value = 0
+
+        if not brand:
+            flash("Enter the card's brand.")
+        elif not 0 < value <= 1000:
+            flash("Enter a value between $0 and $1000.")
+        elif not wanted:
+            flash("Enter at least one brand you want.")
+        else:
+            listings.insert_one({
+                "owner_id": current_user.id,
+                "owner_username": current_user.username,
+                "brand": brand,
+                "value": value,
+                "wanted": wanted,
+                "status": "open",
+                "created_at": datetime.now(timezone.utc),
+            })
+            flash(f"Your ${value:.2f} {brand} card is posted.")
+            return redirect(url_for("browse"))
+
+    return render_template("add.html", form=request.form)
+
+
+@app.route("/browse")
+def browse():
+    cards = listings.find({"status": "open"}).sort("created_at", -1)
+    return render_template("browse.html", cards=list(cards))
 
 
 if __name__ == "__main__":
