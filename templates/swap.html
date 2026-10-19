@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Swap complete · CardSwap{% endblock %}
+
+{% block content %}
+<h1 class="page-title">You swapped with {{ partner }}</h1>
+
+{% with brand=got.brand, value=got.value, size="giftcard-lg" %}{% include "_giftcard.html" %}{% endwith %}
+
+<section class="panel reveal">
+  <h2>Your new {{ got.brand }} card</h2>
+  <span class="label">Card number</span>
+  <p class="code">{{ got.code }}</p>
+</section>
+
+<a href="{{ url_for('offers_page') }}" class="btn btn-secondary">Back to offers</a>
+{% endblock %}

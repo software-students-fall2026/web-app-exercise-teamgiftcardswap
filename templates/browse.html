@@ -4,12 +4,12 @@
 
 {% block content %}
 <section>
-  <h1 class="page-title">Browse cards</h1>
+  <h1 class="page-title">Browse</h1>
 
-  {% if current_user.is_authenticated %}
-    <a href="{{ url_for('add') }}" class="btn btn-primary">Post a card</a>
-  {% endif %}
-  <a href="{{ url_for('search') }}" class="btn btn-secondary">Search cards</a>
+  <a href="{{ url_for('search') }}" class="searchbar">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    Search cards
+  </a>
 
   {% for card in cards %}
     {% include "_listing.html" %}

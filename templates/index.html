@@ -2,6 +2,11 @@
 
 {% block content %}
 <section class="hero">
+  <div class="hero-stack" aria-hidden="true">
+    {% for b, v in [("Starbucks", 25), ("Target", 50), ("Sephora", 40)] %}
+      {% with brand=b, value=v %}{% include "_giftcard.html" %}{% endwith %}
+    {% endfor %}
+  </div>
   <h1>Swap the gift cards you'll never use</h1>
   <p>Got a $30 card for a place you never go? Trade it for an equal-value card somewhere you actually want.</p>
   {% if current_user.is_authenticated %}
@@ -17,8 +22,8 @@
   <h2>How it works</h2>
   <ol>
     <li><strong>Post your card.</strong> List the brand and value of a card you don't want.</li>
-    <li><strong>Say what you want.</strong> Pick the brands you'd rather have.</li>
-    <li><strong>Swap.</strong> Match with someone holding a like-value card and trade.</li>
+    <li><strong>Make an offer.</strong> Find a card you like and offer one of yours for it.</li>
+    <li><strong>Swap.</strong> Once they accept, you both get each other's card number.</li>
   </ol>
 </section>
 {% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ card.brand }} · CardSwap{% endblock %}
+
+{% block content %}
+<section class="detail">
+  {% with brand=card.brand, value=card.value, size="giftcard-lg" %}{% include "_giftcard.html" %}{% endwith %}
+  <div class="detail-meta">
+    <h1>{{ card.brand }} · ${{ "%.2f"|format(card.value) }}</h1>
+    <p>{% if is_owner %}Your card{% else %}Posted by {{ card.owner_username }}{% endif %}</p>
+  </div>
+  <div class="detail-wants">
+    <span class="label">Wants</span>
+    <p>{% for brand in card.wanted %}<span class="chip">{{ brand }}</span>{% endfor %}</p>
+  </div>
+</section>
+
+{% if card.status != "open" %}
+  <p class="empty">This card has already been swapped.</p>
+{% elif is_owner %}
+  <a href="{{ url_for('edit', card_id=card._id) }}" class="btn btn-secondary">Edit card</a>
+{% elif not current_user.is_authenticated %}
+  <a href="{{ url_for('login') }}" class="btn btn-primary">Log in to make an offer</a>
+{% elif not my_cards %}
+  <div class="panel">
+    <h2>Want this card?</h2>
+    <p>Post one of your cards first, then you can offer it.</p>
+    <a href="{{ url_for('add') }}" class="btn btn-primary">Post a card</a>
+  </div>
+{% else %}
+  <form method="post" action="{{ url_for('make_offer', card_id=card._id) }}" class="panel form">
+    <h2>Make an offer</h2>
+    <p>Pick the card you'll give in exchange.</p>
+    <div class="pick-list">
+      {% for mine in my_cards %}
+        <label class="pick">
+          <input type="radio" name="offered_card_id" value="{{ mine._id }}" {% if loop.first %}checked{% endif %}>
+          <span class="pick-box">
+            <span class="pick-dot" style="--hue: {{ mine.brand|hue }}"></span>
+            <b>{{ mine.brand }} · ${{ "%.2f"|format(mine.value) }}</b>
+          </span>
+        </label>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Send offer</button>
+  </form>
+{% endif %}
+{% endblock %}
