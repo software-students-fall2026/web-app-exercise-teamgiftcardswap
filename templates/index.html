@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <h1>Swap the gift cards you'll never use</h1>
+  <p>Got a $30 card for a place you never go? Trade it for an equal-value card somewhere you actually want.</p>
+  {% if current_user.is_authenticated %}
+    <p class="welcome">Signed in as <strong>{{ current_user.username }}</strong></p>
+  {% else %}
+    <a href="{{ url_for('signup') }}" class="btn btn-primary">Get started</a>
+    <a href="{{ url_for('login') }}" class="btn btn-secondary">Log in</a>
+  {% endif %}
+</section>
+
+<section class="steps">
+  <h2>How it works</h2>
+  <ol>
+    <li><strong>Post your card.</strong> List the brand and value of a card you don't want.</li>
+    <li><strong>Say what you want.</strong> Pick the brands you'd rather have.</li>
+    <li><strong>Swap.</strong> Match with someone holding a like-value card and trade.</li>
+  </ol>
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Log in · CardSwap{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <h1>Log in</h1>
+  <form method="post" class="form">
+    <label for="username">Username</label>
+    <input id="username" name="username" type="text" autocomplete="username" required>
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+    <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+  <p class="auth-switch">New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+</section>
+{% endblock %}
