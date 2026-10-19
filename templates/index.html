@@ -1,29 +1,20 @@
 {% extends "base.html" %}
-
 {% block content %}
-<section class="hero">
-  <div class="hero-stack" aria-hidden="true">
-    {% for b, v in [("Starbucks", 25), ("Target", 50), ("Sephora", 40)] %}
-      {% with brand=b, value=v %}{% include "_giftcard.html" %}{% endwith %}
-    {% endfor %}
-  </div>
-  <h1>Swap the gift cards you'll never use</h1>
-  <p>Got a $30 card for a place you never go? Trade it for an equal-value card somewhere you actually want.</p>
-  {% if current_user.is_authenticated %}
-    <p class="welcome">Signed in as <strong>{{ current_user.username }}</strong></p>
-    <a href="{{ url_for('add') }}" class="btn btn-primary">Post a card</a>
-  {% else %}
-    <a href="{{ url_for('signup') }}" class="btn btn-primary">Get started</a>
-  {% endif %}
-  <a href="{{ url_for('browse') }}" class="btn btn-secondary">Browse cards</a>
-</section>
+<h1>CardSwap</h1>
+<p>Got a gift card you'll never use? Swap it with someone for a card you actually want.</p>
 
-<section class="steps">
-  <h2>How it works</h2>
-  <ol>
-    <li><strong>Post your card.</strong> List the brand and value of a card you don't want.</li>
-    <li><strong>Make an offer.</strong> Find a card you like and offer one of yours for it.</li>
-    <li><strong>Swap.</strong> Once they accept, you both get each other's card number.</li>
-  </ol>
-</section>
+{% if current_user.is_authenticated %}
+  <p>Hi {{ current_user.username }}!</p>
+  <a href="/add" class="button">Post a card</a>
+{% else %}
+  <a href="/signup" class="button">Sign up</a>
+{% endif %}
+<a href="/browse" class="button gray">Browse cards</a>
+
+<h2>How it works</h2>
+<ol>
+  <li>Post a gift card you don't want</li>
+  <li>Find a card you like and offer one of yours for it</li>
+  <li>If they accept, you both get each other's card number</li>
+</ol>
 {% endblock %}
