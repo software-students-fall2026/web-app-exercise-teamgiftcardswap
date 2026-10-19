@@ -1,20 +1,13 @@
 {% extends "base.html" %}
-
-{% block title %}Browse cards · CardSwap{% endblock %}
-
 {% block content %}
-<section>
-  <h1 class="page-title">Browse</h1>
-
-  <a href="{{ url_for('search') }}" class="searchbar">
-    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    Search cards
+<h1>Browse Cards</h1>
+{% for card in cards %}
+  <a href="/card/{{ card._id }}" class="card">
+    <h3>{{ card.brand }} - ${{ card.value }}</h3>
+    <p>Wants: {{ card.wanted }}</p>
+    <p class="small">Posted by {{ card.owner_username }}</p>
   </a>
-
-  {% for card in cards %}
-    {% include "_listing.html" %}
-  {% else %}
-    <p class="empty">No cards posted yet.</p>
-  {% endfor %}
-</section>
+{% else %}
+  <p>No cards yet.</p>
+{% endfor %}
 {% endblock %}

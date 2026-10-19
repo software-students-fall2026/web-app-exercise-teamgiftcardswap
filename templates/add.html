@@ -1,13 +1,15 @@
 {% extends "base.html" %}
-
-{% block title %}Post a card · CardSwap{% endblock %}
-
 {% block content %}
-<section class="auth">
-  <h1>Post a card</h1>
-  <form method="post" class="form">
-    {% include "_card_fields.html" %}
-    <button type="submit" class="btn btn-primary">Post card</button>
-  </form>
-</section>
+<h1>Post a Card</h1>
+<form method="POST">
+  <label>Brand</label>
+  <input type="text" name="brand" placeholder="Starbucks" required>
+  <label>Value ($)</label>
+  <input type="number" name="value" step="0.01" min="0" required>
+  <label>Brands you want</label>
+  <input type="text" name="wanted" placeholder="Target, Amazon" required>
+  <label>Card number (only shown to who you swap with)</label>
+  <input type="text" name="code" required>
+  <button type="submit">Post</button>
+</form>
 {% endblock %}

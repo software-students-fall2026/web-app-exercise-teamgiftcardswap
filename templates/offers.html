@@ -1,59 +1,41 @@
 {% extends "base.html" %}
-
-{% block title %}Offers · CardSwap{% endblock %}
-
 {% block content %}
-<h1 class="page-title">Offers</h1>
+<h1>Offers</h1>
 
-<h2 class="section-title">Received</h2>
+<h2>Received</h2>
 {% for offer in received %}
-  <article class="offer">
-    <p class="offer-who">{{ offer.from_username }} wants to swap</p>
-    <div class="offer-trade">
-      <div><span class="label">You get</span><b>{{ offer.offered_brand }}</b><span>${{ "%.2f"|format(offer.offered_value) }}</span></div>
-      <span class="swap-arrow">⇄</span>
-      <div><span class="label">You give</span><b>{{ offer.target_brand }}</b><span>${{ "%.2f"|format(offer.target_value) }}</span></div>
-    </div>
-    <div class="offer-actions">
-      <form method="post" action="{{ url_for('accept_offer', offer_id=offer._id) }}"
-            onsubmit="return confirm('Accept this swap?');">
-        <button type="submit" class="btn-small btn-accept">Accept</button>
-      </form>
-      <form method="post" action="{{ url_for('decline_offer', offer_id=offer._id) }}">
-        <button type="submit" class="btn-small">Decline</button>
-      </form>
-    </div>
-  </article>
+  <div class="card">
+    <p><b>{{ offer.from_user }}</b> wants to trade their {{ offer.offered_brand }} for your {{ offer.target_brand }}</p>
+    <form method="POST" action="/offers/{{ offer._id }}/accept" class="inline">
+      <button type="submit">Accept</button>
+    </form>
+    <form method="POST" action="/offers/{{ offer._id }}/decline" class="inline">
+      <button type="submit" class="red">Decline</button>
+    </form>
+  </div>
 {% else %}
-  <p class="empty">No offers yet.</p>
+  <p>No offers yet.</p>
 {% endfor %}
 
-<h2 class="section-title">Sent</h2>
+<h2>Sent</h2>
 {% for offer in sent %}
-  <article class="offer">
-    <p class="offer-who">Waiting on {{ offer.to_username }}</p>
-    <div class="offer-trade">
-      <div><span class="label">You give</span><b>{{ offer.offered_brand }}</b><span>${{ "%.2f"|format(offer.offered_value) }}</span></div>
-      <span class="swap-arrow">⇄</span>
-      <div><span class="label">You get</span><b>{{ offer.target_brand }}</b><span>${{ "%.2f"|format(offer.target_value) }}</span></div>
-    </div>
-    <div class="offer-actions">
-      <form method="post" action="{{ url_for('decline_offer', offer_id=offer._id) }}">
-        <button type="submit" class="btn-small btn-danger">Cancel offer</button>
-      </form>
-    </div>
-  </article>
+  <div class="card">
+    <p>Your {{ offer.offered_brand }} for {{ offer.to_user }}'s {{ offer.target_brand }} (waiting)</p>
+    <form method="POST" action="/offers/{{ offer._id }}/decline" class="inline">
+      <button type="submit" class="red">Cancel</button>
+    </form>
+  </div>
 {% else %}
-  <p class="empty">You haven't sent any offers.</p>
+  <p>You haven't sent any offers.</p>
 {% endfor %}
 
-{% if swaps %}
-  <h2 class="section-title">Completed swaps</h2>
-  {% for offer in swaps %}
-    <a href="{{ url_for('swap_detail', offer_id=offer._id) }}" class="offer offer-done">
-      <b>{{ offer.offered_brand }} ⇄ {{ offer.target_brand }}</b>
-      <span>View card number →</span>
-    </a>
-  {% endfor %}
-{% endif %}
+<h2>Completed Swaps</h2>
+{% for offer in done %}
+  <div class="card">
+    <p>{{ offer.offered_brand }} &lt;-&gt; {{ offer.target_brand }}</p>
+    <p>Your new card number: <b>{{ offer.code }}</b></p>
+  </div>
+{% else %}
+  <p>No swaps yet.</p>
+{% endfor %}
 {% endblock %}
