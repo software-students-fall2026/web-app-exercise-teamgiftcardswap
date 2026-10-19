@@ -6,10 +6,11 @@
   <p>Got a $30 card for a place you never go? Trade it for an equal-value card somewhere you actually want.</p>
   {% if current_user.is_authenticated %}
     <p class="welcome">Signed in as <strong>{{ current_user.username }}</strong></p>
+    <a href="{{ url_for('add') }}" class="btn btn-primary">Post a card</a>
   {% else %}
     <a href="{{ url_for('signup') }}" class="btn btn-primary">Get started</a>
-    <a href="{{ url_for('login') }}" class="btn btn-secondary">Log in</a>
   {% endif %}
+  <a href="{{ url_for('browse') }}" class="btn btn-secondary">Browse cards</a>
 </section>
 
 <section class="steps">

@@ -1,0 +1,14 @@
+<article class="listing">
+  <div class="listing-head">
+    <span class="listing-brand">{{ card.brand }}</span>
+    <span class="listing-value">${{ "%.2f"|format(card.value) }}</span>
+  </div>
+  <p class="listing-wants">Wants: {{ card.wanted|join(", ") }}</p>
+  <p class="listing-owner">
+    {% if current_user.is_authenticated and card.owner_id == current_user.id %}
+      Your card
+    {% else %}
+      Posted by {{ card.owner_username }}
+    {% endif %}
+  </p>
+</article>

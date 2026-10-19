@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Settings · CardSwap{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Settings</h1>
+
+<section class="settings-section">
+  <h2>Account</h2>
+  <p>Signed in as <strong>{{ current_user.username }}</strong></p>
+  <a href="{{ url_for('logout') }}" class="btn btn-secondary">Log out</a>
+</section>
+
+<section class="settings-section">
+  <h2>Change password</h2>
+  <form method="post" action="{{ url_for('change_password') }}" class="form">
+    <label for="current">Current password</label>
+    <input id="current" name="current" type="password" autocomplete="current-password" required>
+
+    <label for="new">New password</label>
+    <input id="new" name="new" type="password" autocomplete="new-password" minlength="6" required>
+
+    <label for="confirm">Confirm new password</label>
+    <input id="confirm" name="confirm" type="password" autocomplete="new-password" minlength="6" required>
+
+    <button type="submit" class="btn btn-primary">Update password</button>
+  </form>
+</section>
+
+<section class="settings-section">
+  <h2>Delete account</h2>
+  <p>This permanently deletes your account and all your cards.</p>
+  <form method="post" action="{{ url_for('delete_account') }}" class="form"
+        onsubmit="return confirm('Delete your account and all your cards? This cannot be undone.');">
+    <label for="delete-password">Password</label>
+    <input id="delete-password" name="password" type="password" autocomplete="current-password" required>
+
+    <button type="submit" class="btn btn-danger-solid">Delete account</button>
+  </form>
+</section>
+{% endblock %}

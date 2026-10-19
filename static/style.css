@@ -148,3 +148,125 @@ body {
 .auth-switch a {
   color: #3b5bdb;
 }
+
+.hint {
+  color: #555b6e;
+  font-size: 0.9rem;
+  margin: -10px 0 16px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  margin: 16px 0 16px;
+}
+
+.listing {
+  background: #ffffff;
+  border: 1px solid #e3e5ee;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.listing-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.listing-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.listing-value {
+  font-weight: 700;
+  color: #2b8a3e;
+}
+
+.listing-wants {
+  margin: 6px 0 2px;
+}
+
+.listing-owner {
+  margin: 0;
+  color: #555b6e;
+  font-size: 0.9rem;
+}
+
+.empty {
+  text-align: center;
+  color: #555b6e;
+}
+
+.topbar-nav {
+  display: flex;
+  gap: 14px;
+}
+
+.listing-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.listing-actions form {
+  margin: 0;
+}
+
+.btn-small {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px solid #3b5bdb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #3b5bdb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-danger {
+  border-color: #e03131;
+  color: #e03131;
+}
+
+.btn-danger-solid {
+  background: #e03131;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.settings-section {
+  background: #ffffff;
+  border: 1px solid #e3e5ee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.settings-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+
+.settings-section p {
+  color: #555b6e;
+  margin: 0 0 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+.result-count {
+  color: #555b6e;
+  font-weight: 600;
+}

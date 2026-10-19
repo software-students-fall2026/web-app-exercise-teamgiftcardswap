@@ -10,3 +10,5 @@ db = client[os.getenv("MONGO_DBNAME", "cardswap")]
 
 users = db["users"]
 users.create_index("username", unique=True)
+
+listings = db["listings"]
