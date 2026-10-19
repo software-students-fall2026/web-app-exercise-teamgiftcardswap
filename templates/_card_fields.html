@@ -1,0 +1,9 @@
+<label for="brand">Card brand</label>
+<input id="brand" name="brand" type="text" placeholder="e.g. Starbucks" value="{{ form.brand }}" required>
+
+<label for="value">Value ($)</label>
+<input id="value" name="value" type="number" min="0.01" max="1000" step="0.01" inputmode="decimal" placeholder="30" value="{{ form.value }}" required>
+
+<label for="wanted">Brands you want</label>
+<input id="wanted" name="wanted" type="text" placeholder="e.g. Target, Amazon" value="{{ form.wanted }}" required>
+<p class="hint">Separate brands with commas.</p>

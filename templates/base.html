@@ -9,11 +9,15 @@
 <body>
   <header class="topbar">
     <a href="{{ url_for('index') }}" class="logo">CardSwap</a>
-    {% if current_user.is_authenticated %}
-      <a href="{{ url_for('logout') }}" class="topbar-link">Log out</a>
-    {% else %}
-      <a href="{{ url_for('login') }}" class="topbar-link">Log in</a>
-    {% endif %}
+    <nav class="topbar-nav">
+      <a href="{{ url_for('browse') }}" class="topbar-link">Browse</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('my_listings') }}" class="topbar-link">My cards</a>
+        <a href="{{ url_for('settings') }}" class="topbar-link">Settings</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="topbar-link">Log in</a>
+      {% endif %}
+    </nav>
   </header>
   <main class="container">
     {% with messages = get_flashed_messages() %}

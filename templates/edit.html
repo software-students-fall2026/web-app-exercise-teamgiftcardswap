@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Edit card · CardSwap{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <h1>Edit card</h1>
+  <form method="post" class="form">
+    {% include "_card_fields.html" %}
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </form>
+  <a href="{{ url_for('my_listings') }}" class="btn btn-secondary">Cancel</a>
+</section>
+{% endblock %}

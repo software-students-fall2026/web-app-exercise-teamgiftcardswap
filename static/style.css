@@ -198,3 +198,61 @@ body {
   text-align: center;
   color: #555b6e;
 }
+
+.topbar-nav {
+  display: flex;
+  gap: 14px;
+}
+
+.listing-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.listing-actions form {
+  margin: 0;
+}
+
+.btn-small {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px solid #3b5bdb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #3b5bdb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-danger {
+  border-color: #e03131;
+  color: #e03131;
+}
+
+.btn-danger-solid {
+  background: #e03131;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.settings-section {
+  background: #ffffff;
+  border: 1px solid #e3e5ee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.settings-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+
+.settings-section p {
+  color: #555b6e;
+  margin: 0 0 12px;
+}

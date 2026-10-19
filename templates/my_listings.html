@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}My cards · CardSwap{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="page-title">My cards</h1>
+  <a href="{{ url_for('add') }}" class="btn btn-primary">Post a card</a>
+
+  {% for card in cards %}
+    <article class="listing">
+      <div class="listing-head">
+        <span class="listing-brand">{{ card.brand }}</span>
+        <span class="listing-value">${{ "%.2f"|format(card.value) }}</span>
+      </div>
+      <p class="listing-wants">Wants: {{ card.wanted|join(", ") }}</p>
+      <p class="listing-owner">Status: {{ card.status|capitalize }}</p>
+      <div class="listing-actions">
+        <a href="{{ url_for('edit', card_id=card._id) }}" class="btn-small">Edit</a>
+        <form method="post" action="{{ url_for('delete', card_id=card._id) }}"
+              data-confirm="Delete this {{ card.brand }} card?"
+              onsubmit="return confirm(this.dataset.confirm);">
+          <button type="submit" class="btn-small btn-danger">Delete</button>
+        </form>
+      </div>
+    </article>
+  {% else %}
+    <p class="empty">You haven't posted any cards yet.</p>
+  {% endfor %}
+</section>
+{% endblock %}
