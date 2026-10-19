@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import datetime, timezone
 
 from bson import ObjectId
@@ -189,6 +190,36 @@ def delete(card_id):
 def browse():
     cards = listings.find({"status": "open"}).sort("created_at", -1)
     return render_template("browse.html", cards=list(cards))
+
+
+@app.route("/search")
+def search():
+    brand = request.args.get("brand", "").strip()
+    wants = request.args.get("wants", "").strip()
+    min_value = request.args.get("min", "").strip()
+    max_value = request.args.get("max", "").strip()
+
+    query = {"status": "open"}
+    if brand:
+        query["brand"] = {"$regex": re.escape(brand), "$options": "i"}
+    if wants:
+        query["wanted"] = {"$regex": re.escape(wants), "$options": "i"}
+
+    value_range = {}
+    try:
+        if min_value:
+            value_range["$gte"] = float(min_value)
+        if max_value:
+            value_range["$lte"] = float(max_value)
+    except ValueError:
+        flash("Enter numbers for the value range.")
+        value_range = {}
+    if value_range:
+        query["value"] = value_range
+
+    searched = any([brand, wants, min_value, max_value])
+    cards = list(listings.find(query).sort("created_at", -1)) if searched else []
+    return render_template("search.html", cards=cards, searched=searched, args=request.args)
 
 
 @app.route("/my-listings")

@@ -256,3 +256,17 @@ body {
   color: #555b6e;
   margin: 0 0 12px;
 }
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+.result-count {
+  color: #555b6e;
+  font-weight: 600;
+}

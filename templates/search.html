@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Search · CardSwap{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="page-title">Search cards</h1>
+
+  <form method="get" class="form settings-section">
+    <label for="brand">Card brand</label>
+    <input id="brand" name="brand" type="text" placeholder="e.g. Target" value="{{ args.brand }}">
+
+    <label for="wants">Owner wants</label>
+    <input id="wants" name="wants" type="text" placeholder="e.g. Starbucks" value="{{ args.wants }}">
+    <p class="hint">Find people who want a card you have.</p>
+
+    <div class="form-row">
+      <div>
+        <label for="min">Min ($)</label>
+        <input id="min" name="min" type="number" min="0" step="0.01" inputmode="decimal" value="{{ args.min }}">
+      </div>
+      <div>
+        <label for="max">Max ($)</label>
+        <input id="max" name="max" type="number" min="0" step="0.01" inputmode="decimal" value="{{ args.max }}">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if searched %}
+      <a href="{{ url_for('search') }}" class="btn btn-secondary">Clear</a>
+    {% endif %}
+  </form>
+
+  {% if searched %}
+    {% if cards %}
+      <p class="result-count">{{ cards|length }} card{{ "" if cards|length == 1 else "s" }} found</p>
+    {% endif %}
+    {% for card in cards %}
+      {% include "_listing.html" %}
+    {% else %}
+      <p class="empty">No cards match your search.</p>
+    {% endfor %}
+  {% endif %}
+</section>
+{% endblock %}
