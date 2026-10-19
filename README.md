@@ -10,6 +10,10 @@ An application in which users can list gift cards they are looking to sell/swap,
 
 https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues/
 
+## Task Board and Issues
+Task Board: https://github.com/orgs/software-students-fall2026/projects/60/
+Issues: https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues
+
 ## Steps necessary to run the software
 
 Requires Python 3 and Docker.
