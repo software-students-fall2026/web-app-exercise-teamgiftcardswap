@@ -87,3 +87,64 @@ body {
 .steps li {
   margin-bottom: 8px;
 }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-link {
+  color: #3b5bdb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.flash {
+  background: #fff4e5;
+  border: 1px solid #ffd8a8;
+  color: #8a4b00;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0 0 16px;
+}
+
+.welcome {
+  color: #555b6e;
+}
+
+.auth h1 {
+  font-size: 1.5rem;
+  margin: 16px 0 20px;
+}
+
+.form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form input {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ccd0dc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form button {
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.auth-switch {
+  text-align: center;
+  color: #555b6e;
+}
+
+.auth-switch a {
+  color: #3b5bdb;
+}
