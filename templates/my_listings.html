@@ -8,20 +8,25 @@
   <a href="{{ url_for('add') }}" class="btn btn-primary">Post a card</a>
 
   {% for card in cards %}
-    <article class="listing">
-      <div class="listing-head">
+    <article class="listing {% if card.status == 'swapped' %}listing-done{% endif %}">
+      {% with brand=card.brand, value=card.value, size="giftcard-sm" %}{% include "_giftcard.html" %}{% endwith %}
+      <div class="listing-body">
         <span class="listing-brand">{{ card.brand }}</span>
-        <span class="listing-value">${{ "%.2f"|format(card.value) }}</span>
-      </div>
-      <p class="listing-wants">Wants: {{ card.wanted|join(", ") }}</p>
-      <p class="listing-owner">Status: {{ card.status|capitalize }}</p>
-      <div class="listing-actions">
-        <a href="{{ url_for('edit', card_id=card._id) }}" class="btn-small">Edit</a>
-        <form method="post" action="{{ url_for('delete', card_id=card._id) }}"
-              data-confirm="Delete this {{ card.brand }} card?"
-              onsubmit="return confirm(this.dataset.confirm);">
-          <button type="submit" class="btn-small btn-danger">Delete</button>
-        </form>
+        <p class="listing-wants">
+          {% for brand in card.wanted %}<span class="chip">{{ brand }}</span>{% endfor %}
+        </p>
+        {% if card.status == "swapped" %}
+          <span class="pill">Swapped</span>
+        {% else %}
+          <div class="listing-actions">
+            <a href="{{ url_for('edit', card_id=card._id) }}" class="btn-small">Edit</a>
+            <form method="post" action="{{ url_for('delete', card_id=card._id) }}"
+                  data-confirm="Delete this {{ card.brand }} card?"
+                  onsubmit="return confirm(this.dataset.confirm);">
+              <button type="submit" class="btn-small btn-danger">Delete</button>
+            </form>
+          </div>
+        {% endif %}
       </div>
     </article>
   {% else %}

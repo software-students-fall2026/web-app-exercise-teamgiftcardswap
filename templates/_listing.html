@@ -1,14 +1,16 @@
-<article class="listing">
-  <div class="listing-head">
+<a href="{{ url_for('card_detail', card_id=card._id) }}" class="listing">
+  {% with brand=card.brand, value=card.value, size="giftcard-sm" %}{% include "_giftcard.html" %}{% endwith %}
+  <div class="listing-body">
     <span class="listing-brand">{{ card.brand }}</span>
-    <span class="listing-value">${{ "%.2f"|format(card.value) }}</span>
+    <p class="listing-wants">
+      {% for brand in card.wanted %}<span class="chip">{{ brand }}</span>{% endfor %}
+    </p>
+    <p class="listing-owner">
+      {% if current_user.is_authenticated and card.owner_id == current_user.id %}
+        Your card
+      {% else %}
+        Posted by {{ card.owner_username }}
+      {% endif %}
+    </p>
   </div>
-  <p class="listing-wants">Wants: {{ card.wanted|join(", ") }}</p>
-  <p class="listing-owner">
-    {% if current_user.is_authenticated and card.owner_id == current_user.id %}
-      Your card
-    {% else %}
-      Posted by {{ card.owner_username }}
-    {% endif %}
-  </p>
-</article>
+</a>

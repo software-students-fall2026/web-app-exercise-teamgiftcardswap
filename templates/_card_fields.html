@@ -7,3 +7,7 @@
 <label for="wanted">Brands you want</label>
 <input id="wanted" name="wanted" type="text" placeholder="e.g. Target, Amazon" value="{{ form.wanted }}" required>
 <p class="hint">Separate brands with commas.</p>
+
+<label for="code">Card number</label>
+<input id="code" name="code" type="text" autocomplete="off" value="{{ form.code }}" required>
+<p class="hint">Only shown to the person you swap with.</p>

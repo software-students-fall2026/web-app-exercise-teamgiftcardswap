@@ -1,5 +1,6 @@
 import os
 import re
+import zlib
 from datetime import datetime, timezone
 
 from bson import ObjectId
@@ -17,7 +18,7 @@ from flask_login import (
 from pymongo.errors import DuplicateKeyError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import listings, users
+from db import listings, offers, users
 
 load_dotenv()
 
@@ -41,6 +42,19 @@ def load_user(user_id):
     except InvalidId:
         return None
     return User(doc) if doc else None
+
+
+@app.template_filter("hue")
+def brand_hue(brand):
+    """Give each brand its own card color."""
+    return zlib.crc32(brand.lower().encode()) % 360
+
+
+@app.context_processor
+def inject_offer_count():
+    if not current_user.is_authenticated:
+        return {}
+    return {"pending_count": offers.count_documents({"to_user_id": current_user.id, "status": "pending"})}
 
 
 @app.route("/")
@@ -108,6 +122,7 @@ def parse_card_form(form):
     """Return (fields, error) from a submitted card form."""
     brand = form.get("brand", "").strip()
     wanted = [b.strip() for b in form.get("wanted", "").split(",") if b.strip()]
+    code = form.get("code", "").strip()
 
     try:
         value = round(float(form.get("value", "")), 2)
@@ -120,18 +135,38 @@ def parse_card_form(form):
         return None, "Enter a value between $0 and $1000."
     if not wanted:
         return None, "Enter at least one brand you want."
-    return {"brand": brand, "value": value, "wanted": wanted}, None
+    if not code:
+        return None, "Enter the card number."
+    return {"brand": brand, "value": value, "wanted": wanted, "code": code}, None
 
 
-def get_own_card(card_id):
-    """Return the current user's card with this id, or 404."""
+def get_card(card_id):
+    """Return the card with this id, or 404."""
     try:
-        card = listings.find_one({"_id": ObjectId(card_id), "owner_id": current_user.id})
+        card = listings.find_one({"_id": ObjectId(card_id)})
     except InvalidId:
         card = None
     if not card:
         abort(404)
     return card
+
+
+def get_own_card(card_id):
+    """Return the current user's card with this id, or 404."""
+    card = get_card(card_id)
+    if card["owner_id"] != current_user.id:
+        abort(404)
+    return card
+
+
+def get_offer(offer_id):
+    try:
+        offer = offers.find_one({"_id": ObjectId(offer_id)})
+    except InvalidId:
+        offer = None
+    if not offer:
+        abort(404)
+    return offer
 
 
 @app.route("/add", methods=["GET", "POST"])
@@ -150,7 +185,7 @@ def add():
                 "created_at": datetime.now(timezone.utc),
             })
             flash(f"Your ${fields['value']:.2f} {fields['brand']} card is posted.")
-            return redirect(url_for("browse"))
+            return redirect(url_for("my_listings"))
 
     return render_template("add.html", form=request.form)
 
@@ -159,6 +194,9 @@ def add():
 @login_required
 def edit(card_id):
     card = get_own_card(card_id)
+    if card["status"] != "open":
+        flash("Swapped cards can't be edited.")
+        return redirect(url_for("my_listings"))
 
     if request.method == "POST":
         fields, error = parse_card_form(request.form)
@@ -173,6 +211,7 @@ def edit(card_id):
         "brand": card["brand"],
         "value": f"{card['value']:.2f}",
         "wanted": ", ".join(card["wanted"]),
+        "code": card.get("code", ""),
     }
     return render_template("edit.html", card=card, form=form)
 
@@ -182,8 +221,125 @@ def edit(card_id):
 def delete(card_id):
     card = get_own_card(card_id)
     listings.delete_one({"_id": card["_id"]})
+    offers.delete_many({
+        "status": "pending",
+        "$or": [{"offered_card_id": card["_id"]}, {"target_card_id": card["_id"]}],
+    })
     flash(f"Your {card['brand']} card was deleted.")
     return redirect(url_for("my_listings"))
+
+
+@app.route("/card/<card_id>")
+def card_detail(card_id):
+    card = get_card(card_id)
+    is_owner = current_user.is_authenticated and card["owner_id"] == current_user.id
+    my_cards = []
+    if current_user.is_authenticated and not is_owner:
+        my_cards = list(listings.find({"owner_id": current_user.id, "status": "open"}))
+    return render_template("card.html", card=card, is_owner=is_owner, my_cards=my_cards)
+
+
+@app.route("/card/<card_id>/offer", methods=["POST"])
+@login_required
+def make_offer(card_id):
+    target = get_card(card_id)
+    offered = get_own_card(request.form.get("offered_card_id"))
+
+    if target["owner_id"] == current_user.id or target["status"] != "open" or offered["status"] != "open":
+        flash("That swap isn't possible.")
+        return redirect(url_for("card_detail", card_id=card_id))
+
+    offers.insert_one({
+        "from_user_id": current_user.id,
+        "from_username": current_user.username,
+        "to_user_id": target["owner_id"],
+        "to_username": target["owner_username"],
+        "offered_card_id": offered["_id"],
+        "offered_brand": offered["brand"],
+        "offered_value": offered["value"],
+        "target_card_id": target["_id"],
+        "target_brand": target["brand"],
+        "target_value": target["value"],
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc),
+    })
+    flash(f"Offer sent to {target['owner_username']}.")
+    return redirect(url_for("offers_page"))
+
+
+@app.route("/offers")
+@login_required
+def offers_page():
+    received = offers.find({"to_user_id": current_user.id, "status": "pending"}).sort("created_at", -1)
+    sent = offers.find({"from_user_id": current_user.id, "status": "pending"}).sort("created_at", -1)
+    swaps = offers.find({
+        "status": "accepted",
+        "$or": [{"from_user_id": current_user.id}, {"to_user_id": current_user.id}],
+    }).sort("created_at", -1)
+    return render_template("offers.html", received=list(received), sent=list(sent), swaps=list(swaps))
+
+
+@app.route("/offers/<offer_id>/accept", methods=["POST"])
+@login_required
+def accept_offer(offer_id):
+    offer = get_offer(offer_id)
+    if offer["to_user_id"] != current_user.id or offer["status"] != "pending":
+        abort(404)
+
+    target = listings.find_one({"_id": offer["target_card_id"], "status": "open"})
+    offered = listings.find_one({"_id": offer["offered_card_id"], "status": "open"})
+    if not target or not offered:
+        offers.update_one({"_id": offer["_id"]}, {"$set": {"status": "declined"}})
+        flash("One of those cards is no longer available.")
+        return redirect(url_for("offers_page"))
+
+    card_ids = [target["_id"], offered["_id"]]
+    listings.update_many({"_id": {"$in": card_ids}}, {"$set": {"status": "swapped"}})
+    offers.update_one({"_id": offer["_id"]}, {"$set": {
+        "status": "accepted",
+        "offered_code": offered["code"],
+        "target_code": target["code"],
+    }})
+    # Both cards are gone now, so close any other offers that use them
+    offers.update_many(
+        {"status": "pending", "$or": [
+            {"offered_card_id": {"$in": card_ids}},
+            {"target_card_id": {"$in": card_ids}},
+        ]},
+        {"$set": {"status": "declined"}},
+    )
+    flash("Swap complete!")
+    return redirect(url_for("swap_detail", offer_id=offer["_id"]))
+
+
+@app.route("/offers/<offer_id>/decline", methods=["POST"])
+@login_required
+def decline_offer(offer_id):
+    offer = get_offer(offer_id)
+    if current_user.id not in (offer["to_user_id"], offer["from_user_id"]) or offer["status"] != "pending":
+        abort(404)
+    offers.update_one({"_id": offer["_id"]}, {"$set": {"status": "declined"}})
+    flash("Offer removed.")
+    return redirect(url_for("offers_page"))
+
+
+@app.route("/swaps/<offer_id>")
+@login_required
+def swap_detail(offer_id):
+    offer = get_offer(offer_id)
+    if offer["status"] != "accepted":
+        abort(404)
+
+    # Show each person the card they received
+    if current_user.id == offer["to_user_id"]:
+        got = {"brand": offer["offered_brand"], "value": offer["offered_value"], "code": offer["offered_code"]}
+        partner = offer["from_username"]
+    elif current_user.id == offer["from_user_id"]:
+        got = {"brand": offer["target_brand"], "value": offer["target_value"], "code": offer["target_code"]}
+        partner = offer["to_username"]
+    else:
+        abort(404)
+    return render_template("swap.html", got=got, partner=partner)
 
 
 @app.route("/browse")
@@ -266,6 +422,10 @@ def delete_account():
         flash("Password is incorrect. Your account was not deleted.")
         return redirect(url_for("settings"))
 
+    offers.delete_many({
+        "status": "pending",
+        "$or": [{"from_user_id": current_user.id}, {"to_user_id": current_user.id}],
+    })
     listings.delete_many({"owner_id": current_user.id})
     users.delete_one({"_id": doc["_id"]})
     logout_user()
