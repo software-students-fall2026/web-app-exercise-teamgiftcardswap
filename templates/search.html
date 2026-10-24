@@ -11,7 +11,7 @@
     <a href="/card/{{ card._id }}" class="card">
       <h3>{{ card.brand }} - ${{ card.value }}</h3>
       <p>Wants: {{ card.wanted }}</p>
-      <p class="small">Posted by {{ card.owner_username }}</p>
+      <p class="small">Posted by {% if current_user.is_authenticated and card.owner_id == current_user.id %}<em>you</em>{% else %}{{ card.owner_username }}{% endif %}</p>
     </a>
   {% else %}
     <p>No cards found.</p>

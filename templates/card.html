@@ -2,7 +2,7 @@
 {% block content %}
 <h1>{{ card.brand }} - ${{ card.value }}</h1>
 <p>Wants: {{ card.wanted }}</p>
-<p class="small">Posted by {{ card.owner_username }}</p>
+<p class="small">Posted by {% if current_user.is_authenticated and card.owner_id == current_user.id %}<em>you</em>{% else %}{{ card.owner_username }}{% endif %}</p>
 
 {% if card.status != "open" %}
   <p>This card was already swapped.</p>
