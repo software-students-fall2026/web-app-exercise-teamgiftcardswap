@@ -119,23 +119,3 @@ button, .button {
   background-color: #1f3a24;
   color: #cdeccd;
 }
-
-nav a:hover, button:hover, .button:hover {
-  color: black;
-}
-
-.card:hover {
-  color: #ccc;
-}
-
-[data-theme="dark"] .card:hover {
-  color: #191919;
-}
-
-.container a:not(.card):not(.button):hover {
-  color: #ffff11;
-}
-
-.card:hover .small {
-  color: #777;
-}
