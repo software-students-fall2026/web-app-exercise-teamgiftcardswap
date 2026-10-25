@@ -98,3 +98,24 @@ button, .button {
   color: #888;
   font-size: 13px;
 }
+
+[data-theme="dark"] body {
+  background-color: #121212;
+  color: #e6e6e6;
+}
+
+[data-theme="dark"] .card {
+  background-color: #1e1e1e;
+  color: #e6e6e6;
+}
+
+[data-theme="dark"] input, [data-theme="dark"] select {
+  background-color: #262626;
+  color: #e6e6e6;
+  border-color: #444;
+}
+
+[data-theme="dark"] .flash {
+  background-color: #1f3a24;
+  color: #cdeccd;
+}
