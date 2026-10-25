@@ -31,6 +31,7 @@ def user_loader(user_id):
     user = User()
     user.id = str(doc["_id"])
     user.username = doc["username"]
+    user.theme = doc.get("theme", "light")
     return user
 
 
@@ -80,6 +81,15 @@ def login():
 def logout():
     flask_login.logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("/theme", methods=["POST"])
+@flask_login.login_required
+def set_theme():
+    theme = request.form.get("theme")
+    if theme in ("light", "dark"):
+        users.update_one({"_id": ObjectId(flask_login.current_user.id)}, {"$set": {"theme": theme}})
+    return "", 204
 
 
 @app.route("/browse")
