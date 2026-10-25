@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Cards</h1>
+{% for card in cards %}
+  <div class="card">
+    <h3>{{ card.brand }} - ${{ card.value }}</h3>
+    <p>Wants: {{ card.wanted }}</p>
+    {% if card.status == "swapped" %}
+      <p class="small">Swapped</p>
+    {% else %}
+      <a href="/edit/{{ card._id }}" class="button gray">Edit</a>
+      <form method="POST" action="/delete/{{ card._id }}" class="inline">
+        <button type="submit" class="red" onclick="return confirm('Delete this card?')">Delete</button>
+      </form>
+    {% endif %}
+  </div>
+{% else %}
+  <p>You haven't posted any cards. <a href="/add">Post one</a></p>
+{% endfor %}
+{% endblock %}
