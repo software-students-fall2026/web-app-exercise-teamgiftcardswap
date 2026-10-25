@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CardSwap</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";</script>
+  <script>document.documentElement.dataset.theme = {% if current_user.is_authenticated %}"{{ current_user.theme }}"{% else %}localStorage.getItem("theme") || "light"{% endif %};</script>
 </head>
 <body>
   <nav>
@@ -20,7 +20,7 @@
     {% else %}
       <a href="/login">Log in</a>
     {% endif %}
-    <button class="gray" onclick="var t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('theme', t);">Toggle theme</button>
+    <button class="gray" onclick="var t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('theme', t);{% if current_user.is_authenticated %} fetch('/theme', {method: 'POST', body: new URLSearchParams({theme: t})});{% endif %}">Toggle theme</button>
   </nav>
 
   <div class="container">
