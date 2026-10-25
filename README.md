@@ -11,8 +11,8 @@ An application in which users can list gift cards they are looking to sell/swap,
 https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues/
 
 ## Task Board and Issues
-Task Board: https://github.com/orgs/software-students-fall2026/projects/60/
-Issues: https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues
+Our task board for the first sprint is linked [here](https://github.com/orgs/software-students-fall2026/projects/60/), and our task board for the second sprint is linked [here](https://github.com/orgs/software-students-fall2026/projects/75/).
+Our issues (across both sprints) are linked [here](https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues). 
 
 ## Steps necessary to run the software
 
@@ -48,6 +48,3 @@ Requires Python 3 and Docker.
 
    Open http://127.0.0.1:5050.
 
-## Task boards
-
-See instructions. Delete this line and place a link to the task boards here.
