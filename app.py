@@ -188,16 +188,23 @@ def card(card_id):
 @flask_login.login_required
 def offers_page():
     me = flask_login.current_user.username
-    received = offers.find({"to_user": me, "status": "pending"})
-    sent = offers.find({"from_user": me, "status": "pending"})
+    received = list(offers.find({"to_user": me, "status": "pending"}))
+    sent = list(offers.find({"from_user": me, "status": "pending"}))
     done = list(offers.find({"status": "accepted", "$or": [{"from_user": me}, {"to_user": me}]}))
 
-    # look up the code for the card you got from each swap
+    def add_card_values(offer):
+        offered_card = listings.find_one({"_id": ObjectId(offer["offered_card_id"])})
+        target_card = listings.find_one({"_id": ObjectId(offer["target_card_id"])})
+        offer["offered_value"] = offered_card.get("value") if offered_card else None
+        offer["target_value"] = target_card.get("value") if target_card else None
+        return offered_card, target_card
+
+    for offer in received + sent:
+        add_card_values(offer)
+
     for offer in done:
-        if offer["from_user"] == me:
-            got = listings.find_one({"_id": ObjectId(offer["target_card_id"])})
-        else:
-            got = listings.find_one({"_id": ObjectId(offer["offered_card_id"])})
+        offered_card, target_card = add_card_values(offer)
+        got = target_card if offer["from_user"] == me else offered_card
         offer["code"] = got["code"] if got else "?"
 
     return render_template("offers.html", received=received, sent=sent, done=done)

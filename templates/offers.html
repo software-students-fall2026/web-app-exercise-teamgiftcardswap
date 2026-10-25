@@ -5,13 +5,28 @@
 <h2>Received</h2>
 {% for offer in received %}
   <div class="card">
-    <p><b>{{ offer.from_user }}</b> wants to trade their {{ offer.offered_brand }} for your {{ offer.target_brand }}</p>
-    <form method="POST" action="/offers/{{ offer._id }}/accept" class="inline">
-      <button type="submit">Accept</button>
-    </form>
-    <form method="POST" action="/offers/{{ offer._id }}/decline" class="inline">
-      <button type="submit" class="red">Decline</button>
-    </form>
+    <p class="offer-summary"><strong>{{ offer.from_user }}</strong> offers a trade</p>
+    <div class="trade-comparison">
+      <div class="trade-side">
+        <span class="trade-label">They give</span>
+        <strong>{{ offer.offered_brand }}</strong>
+        <span class="trade-value">{% if offer.offered_value is not none %}${{ "%.2f"|format(offer.offered_value) }}{% else %}Value unavailable{% endif %}</span>
+      </div>
+      <span class="trade-arrow" aria-label="for">&rarr;</span>
+      <div class="trade-side trade-side-right">
+        <span class="trade-label">You give</span>
+        <strong>{{ offer.target_brand }}</strong>
+        <span class="trade-value">{% if offer.target_value is not none %}${{ "%.2f"|format(offer.target_value) }}{% else %}Value unavailable{% endif %}</span>
+      </div>
+    </div>
+    <div class="offer-actions">
+      <form method="POST" action="/offers/{{ offer._id }}/accept" class="inline">
+        <button type="submit">Accept</button>
+      </form>
+      <form method="POST" action="/offers/{{ offer._id }}/decline" class="inline">
+        <button type="submit" class="red">Decline</button>
+      </form>
+    </div>
   </div>
 {% else %}
   <p>No offers yet.</p>
@@ -20,7 +35,20 @@
 <h2>Sent</h2>
 {% for offer in sent %}
   <div class="card">
-    <p>Your {{ offer.offered_brand }} for {{ offer.to_user }}'s {{ offer.target_brand }} (waiting)</p>
+    <p class="offer-summary">Waiting for <strong>{{ offer.to_user }}</strong></p>
+    <div class="trade-comparison">
+      <div class="trade-side">
+        <span class="trade-label">You give</span>
+        <strong>{{ offer.offered_brand }}</strong>
+        <span class="trade-value">{% if offer.offered_value is not none %}${{ "%.2f"|format(offer.offered_value) }}{% else %}Value unavailable{% endif %}</span>
+      </div>
+      <span class="trade-arrow" aria-label="for">&rarr;</span>
+      <div class="trade-side trade-side-right">
+        <span class="trade-label">{{ offer.to_user }} gives</span>
+        <strong>{{ offer.target_brand }}</strong>
+        <span class="trade-value">{% if offer.target_value is not none %}${{ "%.2f"|format(offer.target_value) }}{% else %}Value unavailable{% endif %}</span>
+      </div>
+    </div>
     <form method="POST" action="/offers/{{ offer._id }}/decline" class="inline">
       <button type="submit" class="red">Cancel</button>
     </form>
@@ -32,7 +60,30 @@
 <h2>Completed Swaps</h2>
 {% for offer in done %}
   <div class="card">
-    <p>{{ offer.offered_brand }} &lt;-&gt; {{ offer.target_brand }}</p>
+    <p class="offer-summary">Swap completed</p>
+    <div class="trade-comparison">
+      <div class="trade-side">
+        <span class="trade-label">You gave</span>
+        {% if offer.from_user == current_user.username %}
+          <strong>{{ offer.offered_brand }}</strong>
+          <span class="trade-value">{% if offer.offered_value is not none %}${{ "%.2f"|format(offer.offered_value) }}{% else %}Value unavailable{% endif %}</span>
+        {% else %}
+          <strong>{{ offer.target_brand }}</strong>
+          <span class="trade-value">{% if offer.target_value is not none %}${{ "%.2f"|format(offer.target_value) }}{% else %}Value unavailable{% endif %}</span>
+        {% endif %}
+      </div>
+      <span class="trade-arrow" aria-label="for">&rarr;</span>
+      <div class="trade-side trade-side-right">
+        <span class="trade-label">You received</span>
+        {% if offer.from_user == current_user.username %}
+          <strong>{{ offer.target_brand }}</strong>
+          <span class="trade-value">{% if offer.target_value is not none %}${{ "%.2f"|format(offer.target_value) }}{% else %}Value unavailable{% endif %}</span>
+        {% else %}
+          <strong>{{ offer.offered_brand }}</strong>
+          <span class="trade-value">{% if offer.offered_value is not none %}${{ "%.2f"|format(offer.offered_value) }}{% else %}Value unavailable{% endif %}</span>
+        {% endif %}
+      </div>
+    </div>
     <p>Your new card number: <b>{{ offer.code }}</b></p>
   </div>
 {% else %}
