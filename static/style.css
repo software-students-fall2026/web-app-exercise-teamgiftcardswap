@@ -99,47 +99,23 @@ button, .button {
   font-size: 13px;
 }
 
-.offer-summary {
-  margin: 0 0 14px;
+[data-theme="dark"] body {
+  background-color: #121212;
+  color: #e6e6e6;
 }
 
-.trade-comparison {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+[data-theme="dark"] .card {
+  background-color: #1e1e1e;
+  color: #e6e6e6;
 }
 
-.trade-side {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-  overflow-wrap: anywhere;
+[data-theme="dark"] input, [data-theme="dark"] select {
+  background-color: #262626;
+  color: #e6e6e6;
+  border-color: #444;
 }
 
-.trade-side-right {
-  text-align: right;
-}
-
-.trade-label {
-  color: #777;
-  font-size: 12px;
-}
-
-.trade-value {
-  font-size: 14px;
-}
-
-.trade-arrow {
-  color: #777;
-  font-size: 20px;
-}
-
-.offer-actions {
-  display: flex;
-  gap: 8px;
+[data-theme="dark"] .flash {
+  background-color: #1f3a24;
+  color: #cdeccd;
 }
