@@ -12,7 +12,9 @@ https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/
 
 ## Task Board and Issues
 Our task board for the first sprint is linked [here](https://github.com/orgs/software-students-fall2026/projects/60/), and our task board for the second sprint is linked [here](https://github.com/orgs/software-students-fall2026/projects/75/).
-Our issues (across both sprints) are linked [here](https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues?q=is%3Aissue+state%3Aclosed. 
+
+
+Our issues (across both sprints) are linked [here](https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues?q=is%3Aissue+state%3Aclosed). 
 
 ## Steps necessary to run the software
 
