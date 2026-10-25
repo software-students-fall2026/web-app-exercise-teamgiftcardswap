@@ -24,7 +24,7 @@ Requires Python 3 and Docker.
 
    ```bash
    git clone https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap.git
-   cd web-app-exercise-giftcard
+   cd web-app-exercise-teamgiftcardswap
    python3 -m venv .venv
    source .venv/bin/activate   # Windows: .venv\Scripts\activate
    pip install -r requirements.txt
