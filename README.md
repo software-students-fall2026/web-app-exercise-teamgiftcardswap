@@ -43,5 +43,4 @@ Requires Python 3 and Docker.
    flask --app app run --debug --port 5050
    ```
 
-   Open http://127.0.0.1:5050.
-
+   Open [the app at 127.0.0.1:5050](http://127.0.0.1:5050) in your browser.
