@@ -1,34 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CardSwap</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script>document.documentElement.dataset.theme = {% if current_user.is_authenticated %}"{{ current_user.theme }}"{% else %}localStorage.getItem("theme") || "light"{% endif %};</script>
+  <script>
+    function getOSTheme() {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    }
+
+    document.documentElement.dataset.theme = {% if current_user.is_authenticated %}"{{ current_user.theme }}"{% else %} localStorage.getItem("theme") || getOSTheme() || "light"{% endif %};</script>
 </head>
+
 <body>
   <nav>
     <a href="/" class="logo">CardSwap</a>
     <a href="/browse">Browse</a>
     <a href="/search">Search</a>
     {% if current_user.is_authenticated %}
-      <a href="/add">Post</a>
-      <a href="/my-cards">My Cards</a>
-      <a href="/offers">Offers</a>
-      <a href="/logout">Log out</a>
+    <a href="/add">Post</a>
+    <a href="/my-cards">My Cards</a>
+    <a href="/offers">Offers</a>
+    <a href="/logout">Log out</a>
     {% else %}
-      <a href="/login">Log in</a>
+    <a href="/login">Log in</a>
     {% endif %}
-    <button class="gray" onclick="var t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('theme', t);{% if current_user.is_authenticated %} fetch('/theme', {method: 'POST', body: new URLSearchParams({theme: t})});{% endif %}">Toggle theme</button>
+    <button class="gray"
+      onclick="var t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('theme', t);{% if current_user.is_authenticated %} fetch('/theme', {method: 'POST', body: new URLSearchParams({theme: t})});{% endif %}">Toggle
+      theme</button>
   </nav>
 
   <div class="container">
     {% for message in get_flashed_messages() %}
-      <p class="flash">{{ message }}</p>
+    <p class="flash">{{ message }}</p>
     {% endfor %}
 
     {% block content %}{% endblock %}
   </div>
 </body>
+
 </html>
