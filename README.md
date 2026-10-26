@@ -6,15 +6,10 @@ A little exercise to build a web application following an agile development proc
 
 An application in which users can list gift cards they are looking to sell/swap, and which matches users who are looking for each other's gift cards.
 
-## User stories
-
-https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues/
-
 ## Task Board and Issues
 Our task board for the first sprint is linked [here](https://github.com/orgs/software-students-fall2026/projects/60/), and our task board for the second sprint is linked [here](https://github.com/orgs/software-students-fall2026/projects/75/).
 
-
-Our issues (across both sprints) are linked [here](https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues?q=is%3Aissue+state%3Aclosed). 
+Our issues (across both sprints) are linked [here](https://github.com/software-students-fall2026/web-app-exercise-teamgiftcardswap/issues?q=is%3Aissue+state%3Aclosed). These issues contain our user stories. 
 
 ## Steps necessary to run the software
 
@@ -48,5 +43,4 @@ Requires Python 3 and Docker.
    flask --app app run --debug --port 5050
    ```
 
-   Open http://127.0.0.1:5050.
-
+   Open [the app at 127.0.0.1:5050](http://127.0.0.1:5050) in your browser.
